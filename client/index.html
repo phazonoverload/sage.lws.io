@@ -3,28 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Sage Serenity Lewis</title>
   <style>
-    img {
-      height: 200px;
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; text-align: center; }
+    body { background: aliceblue; color: midnightblue; padding: 1rem; }
+    h1 { margin-bottom: 1rem; }
+    p { margin-bottom: 1em; }
+    #files { margin-top: 2em; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; }
+    #files img { height: 200px; margin: 0.25rem; display: block; }
+    #files a { text-decoration: none; }
+    @media screen and (max-width: 480px) {
+      h1 { font-size: 1.5rem; }
+      #files img { height: auto; width: calc(100vw - 2rem); margin: 0.25rem 0; }
     }
   </style>
 </head>
 <body>
+  <h1>Sage Serenty Lewis</h1>
+  <p>We have made the decision not to post lots of photos of Sage online to allow Sage to, in the future, create their own online identity rather than one we have created for her.</p>
+  <p>If you have been given access to this site then you are a close friend or family member. Please respect Sage's (and our) privacy by not posting any of these photos elsewhere or sharing without asking beforehand.</p>
+  <p>Photos & videos are shown latest-first, and you can click on them for full-quality versions.</p>
   <div id="files"></div>
   <script>
     fetch('/api/list').then(r => r.json()).then(files => {
       const filesEl = document.getElementById('files')
       for(let file of files) {
         filesEl.innerHTML += `
-          <a href="${file.url}">
-            ${file.thumbnail}
-          </a>
+        <a href="${file.url}">
+          ${file.thumbnail}
+        </a>
         `
       }
-      // for(let image of files.images) {
-      //   console.log(image);
-      // }
     })
   </script>
 </body>
