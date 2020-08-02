@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cloudinary": "^1.22.0",
-    "dotenv": "^8.2.0"
+    "cloudinary": "^1.22.0"
   }
 }

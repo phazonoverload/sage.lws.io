@@ -1,7 +1,9 @@
-require('dotenv').config()
 const cloudinary = require('cloudinary')
-const { cloud_name, api_key, api_secret } = process.env
-cloudinary.config({ cloud_name, api_key, api_secret })
+cloudinary.config({ 
+  cloud_name: process.env.cl_name, 
+  api_key: process.env.cl_key, 
+  api_secret: process.env.cl_secret
+})
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
