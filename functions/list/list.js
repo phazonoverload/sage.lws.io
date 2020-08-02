@@ -15,8 +15,6 @@ exports.handler = async (event, context) => {
       .sort_by('created_at', 'desc')
       .execute()
 
-    
-
     return { 
       headers, 
       statusCode: 200,
@@ -49,7 +47,7 @@ exports.handler = async (event, context) => {
     }
   } catch(e) {
     console.error('Error', e)
-    return { headers, statusCode: 500, body: 'Error: ' + e }
+    return { headers, statusCode: 500, body: e.toString() }
   }
 }
  
