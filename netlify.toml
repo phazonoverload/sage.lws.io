@@ -1,7 +1,7 @@
 [build]
   functions = "functions"
   publish = "client"
-[build.environment]
+[template.environment]
   cl_name = 'Cloudinary Cloud Name'
   cl_key = 'Cloudinary API Key'
   cl_secret = 'Cloudinary API Secret'
