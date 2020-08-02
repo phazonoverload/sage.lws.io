@@ -6,13 +6,14 @@
   <title>Sage Serenity Lewis</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; text-align: center; }
-    body { background: aliceblue; color: midnightblue; padding: 1rem; }
+    body { background: aliceblue; color: midnightblue; padding: 1rem 1rem 3rem; }
     h1 { margin-bottom: 1rem; }
     p { margin-bottom: 1em; }
     #files { margin-top: 2em; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; }
     #files img { height: 200px; margin: 0.25rem; display: block; }
     #files a { text-decoration: none; }
-    #files p { background: midnightblue; color: white; display: inline-block; padding: 0.25em 0.75em; }
+    #files p { background: #9696df; color: white; display: block; width: 100%; padding: 0.5em; border-radius: 4px; margin: 1.5rem 0 1rem; }
+    button { background: royalblue; color: white; display: block; width: 100%; border: 2px solid midnightblue; padding: 0.5em; border-radius: 4px; margin: 1.5rem 0 1rem; cursor: pointer; }
     @media screen and (max-width: 480px) {
       h1 { font-size: 1.5rem; }
       #files img { height: auto; width: calc(100vw - 2rem); margin: 0.25rem 0; }
@@ -25,20 +26,46 @@
   <p>If you have been given access to this site then you are a close friend or family member. Please respect Sage's (and our) privacy by not posting any of these photos elsewhere or sharing without asking beforehand.</p>
   <p>Photos & videos are shown latest-first, and you can click on them for full-quality versions.</p>
   <div id="files">
-    <p>Loading...</p>
+    <p id='loading'>Loading...</p>
   </div>
+  <button id='load-more'>Load more photos</button>
   <script>
+    let filesEl = document.getElementById('files')
+    let loading = document.getElementById('loading')
+    let loadMore = document.getElementById('load-more')
+    let currentChunk = 0;
+    let chunks;
+
+    loadMore.style.display = 'none'
+    
     fetch('/api/list').then(r => r.json()).then(files => {
-      const filesEl = document.getElementById('files')
-      filesEl.innerHTML = ''
-      for(let file of files) {
-        filesEl.innerHTML += `
-        <a href="${file.url}">
-          ${file.thumbnail}
-        </a>
-        `
-      }
+      chunks = chunkArray(files, 10)
+      loading.style.display = 'none'
+      renderImages(chunks[currentChunk])
+      loadMore.style.display = 'block'
     })
+
+    loadMore.addEventListener('click', () => {
+      currentChunk++
+      renderImages(chunks[currentChunk])
+    })
+
+    function renderImages(chunk) {
+      for(let file of chunk) {
+        filesEl.innerHTML += `<a href="${file.url}">${file.thumbnail}</a>`
+      }
+      if(currentChunk == chunks.length - 1) {
+        loadMore.style.display = 'none'
+      }
+    }
+
+    function chunkArray(arr, size){
+      let index = 0, arrLength = arr.length, temp = [];
+      for (index = 0; index < arrLength; index += size) {
+        chunk = arr.slice(index, index+size); temp.push(chunk);
+      }
+      return temp;
+    }
   </script>
 </body>
 </html>
