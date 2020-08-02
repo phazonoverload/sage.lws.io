@@ -12,6 +12,7 @@
     #files { margin-top: 2em; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; }
     #files img { height: 200px; margin: 0.25rem; display: block; }
     #files a { text-decoration: none; }
+    #files p { background: midnightblue; color: white; display: inline-block; padding: 0.25em 0.75em; }
     @media screen and (max-width: 480px) {
       h1 { font-size: 1.5rem; }
       #files img { height: auto; width: calc(100vw - 2rem); margin: 0.25rem 0; }
@@ -19,14 +20,17 @@
   </style>
 </head>
 <body>
-  <h1>Sage Serenty Lewis</h1>
+  <h1>Sage Serenity Lewis</h1>
   <p>We have made the decision not to post lots of photos of Sage online to allow Sage to, in the future, create their own online identity rather than one we have created for her.</p>
   <p>If you have been given access to this site then you are a close friend or family member. Please respect Sage's (and our) privacy by not posting any of these photos elsewhere or sharing without asking beforehand.</p>
   <p>Photos & videos are shown latest-first, and you can click on them for full-quality versions.</p>
-  <div id="files"></div>
+  <div id="files">
+    <p>Loading...</p>
+  </div>
   <script>
     fetch('/api/list').then(r => r.json()).then(files => {
       const filesEl = document.getElementById('files')
+      filesEl.innerHTML = ''
       for(let file of files) {
         filesEl.innerHTML += `
         <a href="${file.url}">
