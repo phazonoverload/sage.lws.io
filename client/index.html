@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    img {
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div id="files"></div>
+  <script>
+    fetch('/api/list').then(r => r.json()).then(files => {
+      const filesEl = document.getElementById('files')
+      for(let file of files) {
+        filesEl.innerHTML += `
+          <a href="${file.url}">
+            ${file.thumbnail}
+          </a>
+        `
+      }
+      // for(let image of files.images) {
+      //   console.log(image);
+      // }
+    })
+  </script>
+</body>
+</html>
