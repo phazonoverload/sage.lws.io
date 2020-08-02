@@ -13,7 +13,7 @@ const headers = {
 exports.handler = async (event, context) => {
   try {
     const files = await cloudinary.v2.search
-      .expression('folder:sage')
+      .expression('folder:' + process.env.cl_folder_name)
       .sort_by('created_at', 'desc')
       .execute()
 
