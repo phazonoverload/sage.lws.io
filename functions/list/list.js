@@ -21,7 +21,7 @@ exports.handler = async (event, context) => {
       headers, 
       statusCode: 200,
       body: JSON.stringify(
-        files.resources.map(file => {
+        files.resources.filter(file => file.resource_type == 'image').map(file => {
           return {
             url: cloudinary.url(file.public_id+'.jpg', {
               quality: 'auto'
