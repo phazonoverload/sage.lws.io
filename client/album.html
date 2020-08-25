@@ -42,13 +42,32 @@
         Loading album...
       </h2>
 
+      <div class="hidden sm:flex justify-center mt-10" v-else>
+        <button
+          class="text-gray-800 font-bold py-2 px-4 rounded-l"
+          :class="{ ['bg-gray-400']: thumbnails, ['bg-gray-300']: !thumbnails }"
+          @click="thumbnails = true"
+        >
+          Show thumbnails
+        </button>
+        <button
+          class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-r"
+          :class="{ ['bg-gray-300']: thumbnails, ['bg-gray-400']: !thumbnails }"
+          @click="thumbnails = false"
+        >
+          Show feed
+        </button>
+      </div>
+
       <div
-        class="max-w-7xl mx-auto my-10 flex flex-row flex-wrap justify-center"
+        class="max-w-7xl mx-auto my-2 sm:my-10 px-4 sm:px-10 flex-row flex-wrap justify-center"
+        :class="{ flex: thumbnails }"
       >
         <a :href="photo.link" v-for="photo in files">
           <img
             :src="photo.link"
-            class="relative rounded-lg m-2 h-40 block shadow-lg lg:max-w-md"
+            class="relative rounded-lg my-2 block shadow-lg"
+            :class="{ ['sm:h-40']: thumbnails, ['my-4']: !thumbnails, ['lg:max-w-md']: thumbnails, ['w-full']: !thumbnails, ['sm:w-full']: !thumbnails, ['sm:mx-0']: !thumbnails, ['sm:mx-2']: thumbnails }"
           />
         </a>
       </div>
@@ -60,7 +79,8 @@
         el: '#album',
         data: {
           loaded: false,
-          files: []
+          files: [],
+          thumbnails: true
         },
         async created() {
           const { bucketId, prefix } = this.params
