@@ -5,10 +5,6 @@ const b2 = new B2({
   applicationKey: process.env.B2_APPLICATION_KEY
 })
 
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type'
-}
 exports.handler = async (event, context) => {
   try {
     const { bucketId, prefix } = event.queryStringParameters
@@ -27,14 +23,12 @@ exports.handler = async (event, context) => {
       }
     })
     return {
-      headers,
       statusCode: 200,
       body: JSON.stringify(files)
     }
   } catch (e) {
     console.error('Error', e)
     return {
-      headers,
       statusCode: 500,
       body: JSON.stringify({ error: e.toString() })
     }

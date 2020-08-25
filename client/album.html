@@ -87,6 +87,7 @@
           this.files = await fetch(
             `/api/album-single?bucketId=${bucketId}&prefix=${prefix}`
           ).then(r => r.json())
+          console.log(this.files)
           this.loaded = true
         },
         computed: {
