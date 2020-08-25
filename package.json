@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cloudinary": "^1.22.0"
+    "backblaze-b2": "^1.5.0"
   }
 }
