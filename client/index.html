@@ -1,71 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sage Serenity Lewis</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Mono', monospace; text-align: center; }
-    body { background: aliceblue; color: midnightblue; padding: 1rem 1rem 3rem; }
-    h1 { margin-bottom: 1rem; }
-    p { margin-bottom: 1em; }
-    #files { margin-top: 2em; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; }
-    #files img { height: 200px; margin: 0.25rem; display: block; }
-    #files a { text-decoration: none; }
-    #files p { background: #9696df; color: white; display: block; width: 100%; padding: 0.5em; border-radius: 4px; margin: 1.5rem 0 1rem; }
-    button { background: royalblue; color: white; display: block; width: 100%; border: 2px solid midnightblue; padding: 0.5em; border-radius: 4px; margin: 1.5rem 0 1rem; cursor: pointer; font-size: 1.5em; }
-    @media screen and (max-width: 480px) {
-      h1 { font-size: 1.5rem; }
-      #files img { height: auto; width: calc(100vw - 2rem); margin: 0.25rem 0; }
-    }
-  </style>
-</head>
-<body>
-  <h1>Sage Serenity Lewis</h1>
-  <p>We have made the decision not to post lots of photos of Sage online to allow Sage to, in the future, create their own online identity rather than one we have created for her.</p>
-  <p>If you have been given access to this site then you are a close friend or family member. Please respect Sage's (and our) privacy by not posting any of these photos elsewhere or sharing without asking beforehand.</p>
-  <p>Photos & videos are shown latest-first, and you can click on them for full-quality versions.</p>
-  <div id="files">
-    <p id='loading'>Loading...</p>
-  </div>
-  <button id='load-more'>Load more photos</button>
-  <script>
-    let filesEl = document.getElementById('files')
-    let loading = document.getElementById('loading')
-    let loadMore = document.getElementById('load-more')
-    let currentChunk = 0;
-    let chunks;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sage Serenity Lewis</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍃</text></svg>"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@tailwindcss/ui@latest/dist/tailwind-ui.min.css"
+    />
+  </head>
+  <body>
+    <div class="relative bg-green-200 overflow-hidden">
+      <div class="relative pt-6 pb-12 sm:pb-16 md:pb-20 lg:pb-28 xl:pb-32">
+        <main
+          class="mt-4 mx-auto max-w-screen-xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 xl:mt-28"
+        >
+          <div class="text-center">
+            <h2
+              class="text-2xl tracking-tight leading-2 font-extrabold text-gray-900 sm:text-5xl sm:leading-none md:text-6xl"
+            >
+              Sage Serenity Lewis
+            </h2>
+            <p
+              class="mt-3 max-w-md mx-auto text-base text-gray-700 sm:text-lg md:mt-10 md:text-xl md:max-w-3xl"
+            >
+              If you have been given access to this site then you are a close
+              friend or family member. Please respect Sage's (and our) privacy
+              by not posting any of these photos elsewhere or sharing without
+              asking beforehand.
+            </p>
+          </div>
+        </main>
+      </div>
+    </div>
+    <div id="folders">
+      <h2
+        class="text-center tracking-tight leading-2 font-extrabold text-gray-900 text-2xl sm:leading-none sm:text-3xl md:text-5xl p-4 mt-10"
+        v-if="!loaded"
+      >
+        Loading albums...
+      </h2>
+      <div class="mx-10" v-for="folder in folders">
+        <a
+          class="max-w-screen-xl mx-auto rounded overflow-hidden shadow-lg text-center bg-green-400 px-6 py-4 my-10 block"
+          :href="folder.link"
+        >
+          <div class="font-bold text-md md:text-xl">
+            {{folder.fileName.split("/").join("")}}
+          </div>
+        </a>
+      </div>
+    </div>
 
-    loadMore.style.display = 'none'
-    
-    fetch('/api/list').then(r => r.json()).then(files => {
-      chunks = chunkArray(files, 10)
-      loading.style.display = 'none'
-      renderImages(chunks[currentChunk])
-      loadMore.style.display = 'block'
-    })
-
-    loadMore.addEventListener('click', () => {
-      currentChunk++
-      renderImages(chunks[currentChunk])
-    })
-
-    function renderImages(chunk) {
-      for(let file of chunk) {
-        filesEl.innerHTML += `<a href="${file.url}">${file.thumbnail}</a>`
-      }
-      if(currentChunk == chunks.length - 1) {
-        loadMore.style.display = 'none'
-      }
-    }
-
-    function chunkArray(arr, size){
-      let index = 0, arrLength = arr.length, temp = [];
-      for (index = 0; index < arrLength; index += size) {
-        chunk = arr.slice(index, index+size); temp.push(chunk);
-      }
-      return temp;
-    }
-  </script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+      const folders = new Vue({
+        el: '#folders',
+        data: {
+          loaded: false,
+          folders: []
+        },
+        async created() {
+          this.folders = await fetch('/api/albums-list').then(r => r.json())
+          this.loaded = true
+        }
+      })
+    </script>
+  </body>
 </html>
