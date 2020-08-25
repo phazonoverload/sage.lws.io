@@ -14,14 +14,16 @@ exports.handler = async (event, context) => {
       prefix,
       maxFileCount: 10000
     })
-    const files = listing.files.map(photo => {
-      return {
-        ...photo,
-        link: `${process.env.B2_ROOT_URL}/${photo.fileName
-          .split(' ')
-          .join('+')}`
-      }
-    })
+    const files = listing.files
+      .map(photo => {
+        return {
+          ...photo,
+          link: `${process.env.B2_ROOT_URL}/${photo.fileName
+            .split(' ')
+            .join('+')}`
+        }
+      })
+      .sort((a, b) => (a.uploadTimestamp > b.uploadTimestamp ? -1 : 1))
     return {
       statusCode: 200,
       body: JSON.stringify(files)
