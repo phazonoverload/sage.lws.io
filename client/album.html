@@ -63,7 +63,7 @@
         class="max-w-7xl mx-auto my-2 sm:my-10 px-4 sm:px-10 flex-row flex-wrap justify-center"
         :class="{ flex: thumbnails }"
       >
-        <a :href="photo.link" v-for="photo in files">
+        <a :href="photo.link" v-for="photo in album">
           <img
             :src="photo.link"
             class="relative rounded-lg my-2 block shadow-lg"
@@ -79,13 +79,13 @@
         el: '#album',
         data: {
           loaded: false,
-          files: [],
+          album: [],
           thumbnails: true
         },
         async created() {
           const { bucketId, prefix } = this.params
           document.title = prefix.split('/').join('')
-          this.files = await fetch(
+          this.album = await fetch(
             `/api/album-single?bucketId=${bucketId}&prefix=${prefix}`
           ).then(r => r.json())
           this.loaded = true
