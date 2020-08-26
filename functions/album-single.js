@@ -18,9 +18,9 @@ exports.handler = async (event, context) => {
       .map(photo => {
         return {
           ...photo,
-          link: `${process.env.B2_ROOT_URL}/${photo.fileName
-            .split(' ')
-            .join('+')}`
+          link: `https://${process.env.B2_BUCKET_NAME}.${
+            process.env.B2_BUCKET_ENDPOINT
+          }/${photo.fileName.split(' ').join('+')}`
         }
       })
       .sort((a, b) => (a.uploadTimestamp > b.uploadTimestamp ? -1 : 1))

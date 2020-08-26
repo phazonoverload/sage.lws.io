@@ -8,11 +8,8 @@ const b2 = new B2({
 exports.handler = async (event, context) => {
   try {
     await b2.authorize()
-    const { data: bucketList } = await b2.getBucket({
-      bucketName: process.env.B2_BUCKET_NAME
-    })
     const { data: listing } = await b2.listFileNames({
-      bucketId: bucketList.buckets[0].bucketId,
+      bucketId: process.env.B2_BUCKET_ID,
       maxFileCount: 10000,
       delimiter: '/',
       prefix: ''
