@@ -2,12 +2,13 @@
   functions = "functions"
   publish = "client"
 [template.environment]
-  cl_name = 'Cloudinary Cloud Name'
-  cl_key = 'Cloudinary API Key'
-  cl_secret = 'Cloudinary API Secret'
-  cl_ul_preset = 'Cloudinary Upload Preset Name (Unsigned)'
-  cl_folder_name = 'Folder in Cloudinary Library'
-  upload_key = 'Key Required to Upload'
+  SITE_TITLE = 'Text you want displayed on the homepage and tab title'
+  SITE_TEXT = 'Text you want displayed on the homepage underneath the title'
+  B2_KEY_ID = 'Backblaze Key ID'
+  B2_APPLICATION_KEY = 'Backblaze Application Key'
+  B2_BUCKET_NAME = 'Backblaze Bucket Name'
+  B2_BUCKET_ID = 'Backblaze Bucket ID'
+  B2_BUCKET_ENDPOINT = 'Backblakze Bucket Endpoint'
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
