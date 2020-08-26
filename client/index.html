@@ -14,7 +14,7 @@
     />
   </head>
   <body>
-    <div id="folders">
+    <div id="albums">
       <div class="relative bg-green-200 overflow-hidden">
         <div class="relative pt-6 pb-12 sm:pb-16 md:pb-20 lg:pb-28 xl:pb-32">
           <main
@@ -35,40 +35,51 @@
           </main>
         </div>
       </div>
-      <div>
-        <h2
-          class="text-center tracking-tight leading-2 font-extrabold text-gray-900 text-2xl sm:leading-none sm:text-3xl md:text-5xl p-4 mt-10"
-          v-if="!loaded"
+      <h2
+        class="text-center tracking-tight leading-2 font-extrabold text-gray-900 text-2xl sm:leading-none sm:text-3xl md:text-5xl p-4 mt-10"
+        v-if="!loaded"
+      >
+        Loading albums...
+      </h2>
+      <div class="mx-4 md:mx-10" v-for="album in albums">
+        <a
+          class="max-w-screen-xl mx-auto rounded overflow-hidden shadow-lg text-center bg-green-400 px-6 py-4 my-4 md:my-10 block"
+          :href="album.link"
         >
-          Loading albums...
-        </h2>
-        <div class="mx-4 md:mx-10" v-for="folder in folders">
-          <a
-            class="max-w-screen-xl mx-auto rounded overflow-hidden shadow-lg text-center bg-green-400 px-6 py-4 my-4 md:my-10 block"
-            :href="folder.link"
-          >
-            <div class="font-bold text-md md:text-xl text-white">
-              {{folder.fileName.split("/").join("")}}
-            </div>
-          </a>
-        </div>
+          <div class="font-bold text-md md:text-xl text-white">
+            {{album.fileName.split("/").join("")}}
+          </div>
+        </a>
       </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script>
-      const folders = new Vue({
-        el: '#folders',
+      const albums = new Vue({
+        el: '#albums',
         data: {
           loaded: false,
-          folders: [],
+          albums: [],
           site: false
         },
         async created() {
-          this.site = await fetch('/api/site-info').then(r => r.json())
-          document.title = this.site.title
-          this.folders = await fetch('/api/albums-list').then(r => r.json())
-          this.loaded = true
+          await this.loadSiteInfo()
+          await this.loadAlbums()
+        },
+        methods: {
+          async loadSiteInfo() {
+            return new Promise(async (resolve, reject) => {
+              this.site = await fetch('/api/site-info').then(r => r.json())
+              document.title = this.site.title
+              resolve()
+            })
+          },
+          async loadAlbums() {
+            return new Promise(async (resolve, reject) => {
+              this.albums = await fetch('/api/albums-list').then(r => r.json())
+              this.loaded = true
+            })
+          }
         }
       })
     </script>
