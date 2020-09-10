@@ -14,12 +14,14 @@ exports.handler = async (event, context) => {
       delimiter: '/',
       prefix: ''
     })
-    const files = listing.files.map(item => {
-      return {
-        ...item,
-        link: `/album?bucketId=${item.bucketId}&prefix=${item.fileName}`
-      }
-    })
+    const files = listing.files
+      .map(item => {
+        return {
+          ...item,
+          link: `/album?bucketId=${item.bucketId}&prefix=${item.fileName}`
+        }
+      })
+      .sort((a, b) => (a.fileName > b.fileName ? -1 : 1))
     return {
       statusCode: 200,
       body: JSON.stringify(files)

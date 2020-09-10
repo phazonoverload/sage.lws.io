@@ -63,13 +63,23 @@
         class="max-w-7xl mx-auto my-2 sm:my-10 px-4 sm:px-10 flex-row flex-wrap justify-center"
         :class="{ flex: thumbnails }"
       >
-        <a :href="photo.link" v-for="photo in album">
-          <img
-            :src="photo.link"
+        <div v-for="file in album">
+          <a :href="file.link" v-if="file.contentType.split('/')[0] == 'image'">
+            <img
+              :src="file.link"
+              class="relative rounded-lg my-2 block shadow-lg"
+              :class="{ ['sm:h-40']: thumbnails, ['my-4']: !thumbnails, ['lg:max-w-md']: thumbnails, ['w-full']: !thumbnails, ['sm:w-full']: !thumbnails, ['sm:mx-0']: !thumbnails, ['sm:mx-2']: thumbnails }"
+            />
+          </a>
+
+          <video
+            :src="file.link"
+            v-if="file.contentType.split('/')[0] == 'video'"
+            controls
             class="relative rounded-lg my-2 block shadow-lg"
             :class="{ ['sm:h-40']: thumbnails, ['my-4']: !thumbnails, ['lg:max-w-md']: thumbnails, ['w-full']: !thumbnails, ['sm:w-full']: !thumbnails, ['sm:mx-0']: !thumbnails, ['sm:mx-2']: thumbnails }"
-          />
-        </a>
+          ></video>
+        </div>
       </div>
     </div>
 
