@@ -18,7 +18,3 @@ Directly inside of your bucket, you should only have folders. Each folder should
 ## Security Considerations
 
 The bucket is public, which means anyone with the direct file URLs can access your photos. Realistically this is unlikely to be the case, but still worth considering.
-
-## Password Protection
-
-This project is hosted on Netlify, and as such their Pro plan allows for password-protected sites.

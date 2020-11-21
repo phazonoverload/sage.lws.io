@@ -4,6 +4,7 @@
 [template.environment]
   SITE_TITLE = 'Text you want displayed on the homepage and tab title'
   SITE_TEXT = 'Text you want displayed on the homepage underneath the title'
+  SITE_PASSWORD = 'Access password'
   B2_KEY_ID = 'Backblaze Key ID'
   B2_APPLICATION_KEY = 'Backblaze Application Key'
   B2_BUCKET_NAME = 'Backblaze Bucket Name'

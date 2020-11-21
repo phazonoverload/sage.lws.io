@@ -7,7 +7,11 @@ const b2 = new B2({
 
 exports.handler = async (event, context) => {
   try {
-    const { bucketId, prefix } = event.queryStringParameters
+    const { bucketId, prefix, password } = event.queryStringParameters
+    if(password != process.env.SITE_PASSWORD) {
+      throw 'Password invalid'
+    }
+
     await b2.authorize()
     const { data: listing } = await b2.listFileNames({
       bucketId,
