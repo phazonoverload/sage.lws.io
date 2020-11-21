@@ -13,7 +13,7 @@
 
 ## File Structure
 
-Directly inside of your bucket, you should only have folders. Each folder should contain only images.
+Directly inside of your bucket, you should only have folders. Only images and videos will be shown in the web application.
 
 ## Security Considerations
 
