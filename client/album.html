@@ -98,12 +98,35 @@
           thumbnails: true
         },
         async created() {
-          const { bucketId, prefix } = this.params
-          document.title = prefix.split('/').join('')
-          this.album = await fetch(
-            `/api/album-single?bucketId=${bucketId}&prefix=${prefix}`
-          ).then(r => r.json())
-          this.loaded = true
+          await this.checkPassword()
+        },
+        methods: {
+          async checkPassword(phrase = 'Please enter the password') {
+            return new Promise(async (resolve, reject) => {
+              const password = localStorage.getItem('password') || prompt(phrase)
+              const { validated } = await fetch('/api/check-password', {
+                method: 'POST',
+                body: JSON.stringify({ password })
+              }).then(r => r.json())
+              if(!validated) {
+                localStorage.removeItem('password')
+                await this.checkPassword('Password was incorrect. Try again?')
+              } else {
+                localStorage.setItem('password', password)
+                await this.getAlbum()
+                resolve()
+              }
+            })
+          },
+          async getAlbum() {
+            const password = localStorage.getItem('password')
+            const { bucketId, prefix } = this.params
+            document.title = prefix.split('/').join('')
+            this.album = await fetch(
+              `/api/album-single?bucketId=${bucketId}&prefix=${prefix}&password=${password}`
+            ).then(r => r.json())
+            this.loaded = true
+          }
         },
         computed: {
           params() {
