@@ -15,40 +15,52 @@
   </head>
   <body>
     <div id="albums">
-      <div class="relative bg-green-200 overflow-hidden" v-if="site">
-        <div class="relative pt-6 pb-12 sm:pb-16 md:pb-20 lg:pb-28 xl:pb-32">
-          <main
-            class="mt-4 mx-auto max-w-screen-xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 xl:mt-28"
-          >
-            <div class="text-center">
-              <h2
-                class="text-2xl tracking-tight leading-2 font-extrabold text-gray-900 sm:text-5xl sm:leading-none md:text-6xl"
-              >
-                {{site.title}}
-              </h2>
-              <p
-                class="mt-3 max-w-md mx-auto text-base text-gray-700 sm:text-lg md:mt-10 md:text-xl md:max-w-3xl"
-              >
-                {{site.text}}
-              </p>
-            </div>
-          </main>
-        </div>
+      <header class="bg-white p-4 border-b">
+        <a href="/" class="text-blue-500 font-semibold">{{site.title}}</a>
+      </header>
+      <div class="bg-gray-100 p-4">
+        <p>{{site.text}}</p>
       </div>
       <h2
-        class="text-center tracking-tight leading-2 font-extrabold text-gray-900 text-2xl sm:leading-none sm:text-3xl md:text-5xl p-4 mt-10"
+        class="
+          text-center
+          tracking-tight
+          leading-2
+          font-extrabold
+          text-gray-900 text-2xl
+          sm:leading-none
+          sm:text-3xl
+          md:text-5xl
+          p-4
+          mt-10
+        "
         v-if="!loaded"
       >
         Loading albums...
       </h2>
-      <div class="mx-4 md:mx-10" v-for="album in albums">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-4 gap-4">
         <a
-          class="max-w-screen-xl mx-auto rounded overflow-hidden shadow-lg text-center bg-green-400 px-6 py-4 my-4 md:my-10 block"
+          v-for="album in albums"
+          class="
+            border
+            block
+            w-full
+            border
+            block
+            w-full
+            py-2
+            px-4
+            rounded
+            text-blue-500
+            font-semibold
+            hover:bg-blue-500
+            hover:text-white
+            hover-border-blue-500
+          "
+          :href="album.link"
           :href="album.link"
         >
-          <div class="font-bold text-md md:text-xl text-white">
-            {{album.fileName.split("/").join("")}}
-          </div>
+          {{album.fileName.split("/").join("")}}
         </a>
       </div>
     </div>
@@ -56,50 +68,53 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script>
       const albums = new Vue({
-        el: '#albums',
+        el: "#albums",
         data: {
           loaded: false,
           albums: [],
-          site: false
+          site: false,
         },
         async created() {
-          await this.loadSiteInfo()
-          await this.checkPassword()
+          await this.loadSiteInfo();
+          await this.checkPassword();
         },
         methods: {
-          async checkPassword(phrase = 'Please enter the password') {
+          async checkPassword(phrase = "Please enter the password") {
             return new Promise(async (resolve, reject) => {
-              const password = localStorage.getItem('password') || prompt(phrase)
-              const { validated } = await fetch('/api/check-password', {
-                method: 'POST',
-                body: JSON.stringify({ password })
-              }).then(r => r.json())
-              if(!validated) {
-                localStorage.removeItem('password')
-                await this.checkPassword('Password was incorrect. Try again?')
+              const password =
+                localStorage.getItem("password") || prompt(phrase);
+              const { validated } = await fetch("/api/check-password", {
+                method: "POST",
+                body: JSON.stringify({ password }),
+              }).then((r) => r.json());
+              if (!validated) {
+                localStorage.removeItem("password");
+                await this.checkPassword("Password was incorrect. Try again?");
               } else {
-                localStorage.setItem('password', password)
-                await this.loadAlbums()
-                resolve()
+                localStorage.setItem("password", password);
+                await this.loadAlbums();
+                resolve();
               }
-            })
+            });
           },
           async loadSiteInfo() {
             return new Promise(async (resolve, reject) => {
-              this.site = await fetch('/api/site-info').then(r => r.json())
-              document.title = this.site.title
-              resolve()
-            })
+              this.site = await fetch("/api/site-info").then((r) => r.json());
+              document.title = this.site.title;
+              resolve();
+            });
           },
           async loadAlbums() {
             return new Promise(async (resolve, reject) => {
-              const password = localStorage.getItem('password')
-              this.albums = await fetch(`/api/albums-list?password=${password}`).then(r => r.json())
-              this.loaded = true
-            })
-          }
-        }
-      })
+              const password = localStorage.getItem("password");
+              this.albums = await fetch(
+                `/api/albums-list?password=${password}`
+              ).then((r) => r.json());
+              this.loaded = true;
+            });
+          },
+        },
+      });
     </script>
   </body>
 </html>

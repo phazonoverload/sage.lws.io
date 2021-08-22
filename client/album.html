@@ -15,48 +15,45 @@
   </head>
   <body>
     <div id="album">
-      <header class="bg-green-400 shadow">
-        <div
-          class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 lg:flex lg:items-center lg:justify-between"
+      <header class="bg-white p-4 border-b flex justify-between">
+        <span class="text-blue-500 font-semibold"
+          >{{params.prefix.split("/").join("")}}</span
         >
-          <h1
-            class="text-xl md:text-3xl font-bold leading-tight text-white md:pb-1 text-center md:text-left"
-          >
-            {{params.prefix.split("/").join("")}}
-          </h1>
-          <span class="block rounded-md">
-            <a
-              class="items-center px-4 py-2 border border-green-300 text-sm leading-5 font-medium rounded-md text-green-700 bg-white hover:text-green-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:text-green-800 active:bg-green-50 transition duration-150 ease-in-out mt-5 lg:mt-0 block text-center"
-              href="/"
-            >
-              Back to Albums
-            </a>
-          </span>
-        </div>
+        <a href="/" class="text-blue-500 font-semibold">Back to Albums</a>
       </header>
-
       <h2
-        class="text-center tracking-tight leading-2 font-extrabold text-gray-900 text-2xl sm:leading-none sm:text-3xl md:text-5xl p-4 mt-10"
+        class="
+          text-center
+          tracking-tight
+          leading-2
+          font-extrabold
+          text-gray-900 text-2xl
+          sm:leading-none
+          sm:text-3xl
+          md:text-5xl
+          p-4
+          mt-10
+        "
         v-if="!loaded"
       >
         Loading album...
       </h2>
 
       <div v-else>
-        <p class="mt-5 sm:mt-10 p-4 text-center">
-          Last updated {{lastUpdated}}
-        </p>
+        <div class="bg-gray-100 p-4">
+          <p>Last updated {{lastUpdated}}</p>
+        </div>
         <div class="hidden sm:flex justify-center mt-10">
           <button
-            class="text-gray-800 font-bold py-2 px-4 rounded-l"
-            :class="{ ['bg-gray-400']: thumbnails, ['bg-gray-300']: !thumbnails }"
+            class="py-2 px-4 rounded-l border border-blue-500"
+            :class="{ ['bg-blue-500 text-white']: thumbnails, ['bg-white text-blue-500']: !thumbnails }"
             @click="thumbnails = true"
           >
             Show thumbnails
           </button>
           <button
-            class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-r"
-            :class="{ ['bg-gray-300']: thumbnails, ['bg-gray-400']: !thumbnails }"
+            class="p-2 px-4 rounded-r border border-blue-500"
+            :class="{ ['bg-white text-blue-500']: thumbnails, ['bg-blue-500 text-white']: !thumbnails }"
             @click="thumbnails = false"
           >
             Show feed
@@ -65,14 +62,23 @@
       </div>
 
       <div
-        class="max-w-7xl mx-auto my-2 sm:my-10 px-4 sm:px-10 flex-row flex-wrap justify-center"
+        class="
+          max-w-7xl
+          mx-auto
+          my-2
+          sm:my-10
+          px-4
+          sm:px-10
+          flex-row flex-wrap
+          justify-start
+        "
         :class="{ flex: thumbnails }"
       >
         <div v-for="file in album">
           <a :href="file.link" v-if="file.contentType.split('/')[0] == 'image'">
             <img
               :src="file.link"
-              class="relative rounded-lg my-2 block shadow-lg"
+              class="relative rounded my-2 block"
               :class="{ ['sm:h-40']: thumbnails, ['my-4']: !thumbnails, ['lg:max-w-md']: thumbnails, ['w-full']: !thumbnails, ['sm:w-full']: !thumbnails, ['sm:mx-0']: !thumbnails, ['sm:mx-2']: thumbnails }"
             />
           </a>
@@ -81,7 +87,7 @@
             :src="file.link"
             v-if="file.contentType.split('/')[0] == 'video'"
             controls
-            class="relative rounded-lg my-2 block shadow-lg"
+            class="relative rounded my-2 block"
             :class="{ ['sm:h-40']: thumbnails, ['my-4']: !thumbnails, ['lg:max-w-md']: thumbnails, ['w-full']: !thumbnails, ['sm:w-full']: !thumbnails, ['sm:mx-0']: !thumbnails, ['sm:mx-2']: thumbnails }"
           ></video>
         </div>
@@ -91,64 +97,65 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script>
       const album = new Vue({
-        el: '#album',
+        el: "#album",
         data: {
           loaded: false,
           album: [],
-          thumbnails: true
+          thumbnails: true,
         },
         async created() {
-          await this.checkPassword()
+          await this.checkPassword();
         },
         methods: {
-          async checkPassword(phrase = 'Please enter the password') {
+          async checkPassword(phrase = "Please enter the password") {
             return new Promise(async (resolve, reject) => {
-              const password = localStorage.getItem('password') || prompt(phrase)
-              const { validated } = await fetch('/api/check-password', {
-                method: 'POST',
-                body: JSON.stringify({ password })
-              }).then(r => r.json())
-              if(!validated) {
-                localStorage.removeItem('password')
-                await this.checkPassword('Password was incorrect. Try again?')
+              const password =
+                localStorage.getItem("password") || prompt(phrase);
+              const { validated } = await fetch("/api/check-password", {
+                method: "POST",
+                body: JSON.stringify({ password }),
+              }).then((r) => r.json());
+              if (!validated) {
+                localStorage.removeItem("password");
+                await this.checkPassword("Password was incorrect. Try again?");
               } else {
-                localStorage.setItem('password', password)
-                await this.getAlbum()
-                resolve()
+                localStorage.setItem("password", password);
+                await this.getAlbum();
+                resolve();
               }
-            })
+            });
           },
           async getAlbum() {
-            const password = localStorage.getItem('password')
-            const { bucketId, prefix } = this.params
-            document.title = prefix.split('/').join('')
+            const password = localStorage.getItem("password");
+            const { bucketId, prefix } = this.params;
+            document.title = prefix.split("/").join("");
             this.album = await fetch(
               `/api/album-single?bucketId=${bucketId}&prefix=${prefix}&password=${password}`
-            ).then(r => r.json())
-            this.loaded = true
-          }
+            ).then((r) => r.json());
+            this.loaded = true;
+          },
         },
         computed: {
           params() {
-            const search = location.search.substring(1)
+            const search = location.search.substring(1);
             return JSON.parse(
               '{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
               function (key, value) {
-                return key === '' ? value : decodeURIComponent(value)
+                return key === "" ? value : decodeURIComponent(value);
               }
-            )
+            );
           },
           lastUpdated() {
-            const dateObject = new Date(this.album[0].uploadTimestamp)
-            return dateObject.toLocaleDateString('en-GB', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })
-          }
-        }
-      })
+            const dateObject = new Date(this.album[0].uploadTimestamp);
+            return dateObject.toLocaleDateString("en-GB", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            });
+          },
+        },
+      });
     </script>
   </body>
 </html>
